@@ -1,6 +1,6 @@
-# Test Kotlin
+# Notebook
 
-## Mission
+## Tasks
 - Get a path list of installed Android applications in Kotlin
 -  Calculate a hash of each application
 -  Submit hashes to Virustotal via their API
