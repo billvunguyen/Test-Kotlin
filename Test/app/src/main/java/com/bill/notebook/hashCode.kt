@@ -2,6 +2,8 @@ package com.bill.notebook
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
@@ -12,6 +14,9 @@ import kotlin.math.log
 import kotlin.text.Charsets.UTF_8
 import android.os.StrictMode
 import android.os.StrictMode.ThreadPolicy
+import android.view.View
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.RequestQueue
@@ -32,6 +37,12 @@ class hashCode : AppCompatActivity() {
 
     private var requestQueue: RequestQueue? = null
 
+    var textViewStatusGood: TextView? = null
+    var textViewStatusInfected: TextView? = null
+
+    var textViewTotalScan: TextView? = null
+    var textViewTotalPositives: TextView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hash_code)
@@ -51,20 +62,28 @@ class hashCode : AppCompatActivity() {
         val policy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
 
+        textViewTotalScan = findViewById(R.id.TotalScan)
+        textViewTotalPositives = findViewById(R.id.TotalScanPositives)
+
+        textViewStatusGood = findViewById(R.id.status_good)
+        textViewStatusInfected = findViewById(R.id.status_infected)
+
+        textViewStatusGood?.visibility = View.GONE
+        textViewStatusInfected?.visibility = View.GONE
+
     }
 
-    fun md5(str: String): ByteArray = MessageDigest.getInstance("MD5").digest(str.toByteArray(UTF_8))
+    // Calculate hash
+    fun md5(str: String): ByteArray = MessageDigest.getInstance("SHA-256").digest(str.toByteArray(UTF_8))
     fun ByteArray.toHex() = joinToString(separator = "") { byte -> "%02x".format(byte) }
 
     private fun securityCheck() {
-        val test = (md5("abc").toHex())
+        // file check
+        var test = (md5(fileName).toHex())
         Log.d("hashcode",test)
 
         var totalScan : Int = 0
         var positivesScan : Int = 0
-
-        val textViewTotalScan: TextView = findViewById(R.id.TotalScan)
-        val textViewTotalPositives: TextView = findViewById(R.id.TotalScanPositives)
 
         // Request to Virus Total
         requestQueue = Volley.newRequestQueue(this)
@@ -77,13 +96,13 @@ class hashCode : AppCompatActivity() {
             // Total scan
             val total = jsonObject.getString("total")
             Log.i("Total Scan ", total)
-            textViewTotalScan.text = "Total Scan $total"
+            textViewTotalScan?.text = "Total Scan $total"
             totalScan = total.toInt()
 
             // Positives scan
             val positives = jsonObject.getString("positives")
             Log.i("Positives Scan : ", positives)
-            textViewTotalPositives.text = "Total Positives $positives"
+            textViewTotalPositives?.text = "Total Positives $positives"
             positivesScan = positives.toInt()
 
 
@@ -93,28 +112,40 @@ class hashCode : AppCompatActivity() {
         }, Response.ErrorListener { error -> error.printStackTrace() })
         requestQueue?.add(request)
 
+        // Waiting Virustotal's response
         GlobalScope.launch {
             delay(2000L)
-            Log.d("abc", totalScan.toString());
-            Log.d("abc", positivesScan.toString());
             var result: Boolean = calculateSafetyLevel(totalScan,positivesScan)
-            if (result) {
-                Log.d("secu","Good")
-            } else {
-                Log.d("secu", "NO")
-            }
-        }
+            // Fix thread conflict
+            Handler(Looper.getMainLooper()).post(Runnable {
+                if (result) {
+                    Log.d("secu","Good")
+                    textViewStatusGood?.visibility = View.VISIBLE
 
+                } else if (!result && totalScan > 0) {
+                    Log.d("secu","Infected")
+                    textViewStatusInfected?.visibility = View.VISIBLE
+                }
+                else {
+                    Log.d("secu", "Error")
+                    textViewStatusInfected?.text = "ERROR"
+                    textViewStatusInfected?.visibility = View.VISIBLE
+                }
+            })
+        }
     }
 
     private fun calculateSafetyLevel(total: Int, positives: Int): Boolean {
-
         var result: Double = 0.0
-        result = (positives / total).toDouble()
-        if(result < 0.5) {
-            return true
-        } else {
+        if (total<= 0) {
             return false
+        } else {
+            result = (positives / total).toDouble()
+            if (result < 0.5) {
+                return true
+            } else {
+                return false
+            }
         }
     }
 

@@ -30,14 +30,44 @@
         android:text="Total Positives : "
         android:textSize="25dp"
         android:layout_below="@+id/TotalScan"/>
+
     <TextView
         android:id="@+id/infor"
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="If total Positives/total Scan is less 0.5, this application is safe"
         android:layout_below="@+id/TotalScanPositives"
-        android:textAlignment="center"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:text="If total positives/total scan is less 0.5, this application is safe"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/status_good"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GOOD"
+        android:background="@color/green"
+        android:layout_below="@+id/infor"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:padding="10dp" />
+
+    <TextView
+        android:id="@+id/status_infected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Infected"
+        android:background="@android:color/holo_red_light"
+        android:layout_below="@+id/infor"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textSize="25dp"
+        android:padding="10dp" />
 
     <Button
         android:id="@+id/btn_test"
@@ -45,5 +75,5 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="Test Security Application" />
+        android:text="Test Security's level" />
 </RelativeLayout>

@@ -33,8 +33,8 @@ class MainActivity : AppCompatActivity() {
         for (i in list.indices) {
             val packageInfo = list[i]
             if (packageInfo!!.applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM == 0) {
-                val appName = packageInfo.applicationInfo.loadLabel(packageManager).toString()
-                Log.e("App List$i", appName)
+                val appName = packageInfo.applicationInfo.loadLabel(packageManager)
+                Log.e("App List$i", appName.toString())
 
                 arrayAdapter = ArrayAdapter(this,
                     R.layout.support_simple_spinner_dropdown_item, list as List<*>
