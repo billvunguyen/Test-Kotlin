@@ -43,16 +43,19 @@ class hashCode : AppCompatActivity() {
     var textViewTotalScan: TextView? = null
     var textViewTotalPositives: TextView? = null
 
+    var hashString: TextView? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hash_code)
 
-        val getApplicationString:String = intent.getStringExtra("installedApplication").toString()
+        val getApplicationString:String = intent.getStringExtra("textHash").toString()
 
         val textViewFileName: TextView = findViewById(R.id.fileName)
 
         this.fileName = getApplicationString
-        textViewFileName.text= "Hash : $getApplicationString"
+        textViewFileName.text= "Hash : $fileName"
+        Log.d("abc",fileName)
 
         val btnTestApplication = findViewById<Button>(R.id.btn_test)
         btnTestApplication.setOnClickListener {
@@ -61,6 +64,8 @@ class hashCode : AppCompatActivity() {
 
         val policy = ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
+
+        hashString = findViewById(R.id.hashString)
 
         textViewTotalScan = findViewById(R.id.TotalScan)
         textViewTotalPositives = findViewById(R.id.TotalScanPositives)
@@ -74,13 +79,17 @@ class hashCode : AppCompatActivity() {
     }
 
     // Calculate hash
-    fun md5(str: String): ByteArray = MessageDigest.getInstance("SHA-256").digest(str.toByteArray(UTF_8))
+    fun md5(str: String): ByteArray = MessageDigest.getInstance("MD5").digest(str.toByteArray(UTF_8))
     fun ByteArray.toHex() = joinToString(separator = "") { byte -> "%02x".format(byte) }
 
     private fun securityCheck() {
         // file check
-        var test = (md5(fileName).toHex())
-        Log.d("hashcode",test)
+//        var fileNameTest:String = "[Ljava.io.File;@ae13725"
+        var hash = (md5(fileName).toHex())
+        Log.d("hashcode",hash)
+        Log.d("hashcode",fileName)
+
+        hashString?.text = "Hash String : $hash"
 
         var totalScan : Int = 0
         var positivesScan : Int = 0
@@ -88,7 +97,7 @@ class hashCode : AppCompatActivity() {
         // Request to Virus Total
         requestQueue = Volley.newRequestQueue(this)
 
-        val url = "https://www.virustotal.com/vtapi/v2/file/report?apikey=$apiKey&resource=$test&allinfo=false"
+        val url = "https://www.virustotal.com/vtapi/v2/file/report?apikey=$apiKey&resource=$hash&allinfo=false"
         val request = JsonObjectRequest(com.android.volley.Request.Method.GET, url, null, Response.Listener {
                 response ->try {
             val jsonObject = JSONTokener(response.toString()).nextValue() as JSONObject

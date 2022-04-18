@@ -9,14 +9,27 @@
         android:id="@+id/btn_viewList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View Installed App"
-        />
+        android:text="View Installed App" />
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="500dp"
-        android:layout_below="@+id/btn_viewList">
-    </ListView>
+        android:layout_below="@+id/btn_viewList"></ListView>
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/input_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_viewList"
+        android:hint="Enter something"
+        android:textAlignment="center" />
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hash and test level security"
+        android:layout_below="@+id/input_text"/>
 
     <TextView
         android:id="@+id/textView"

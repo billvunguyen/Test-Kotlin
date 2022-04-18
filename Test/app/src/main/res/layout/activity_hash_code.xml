@@ -7,13 +7,21 @@
     android:orientation="vertical">
 
     <TextView
-
         android:id="@+id/fileName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="15dp"
         android:text="Hash : "
         android:textSize="15dp"
+        />
+    <TextView
+        android:id="@+id/hashString"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:text="Hash String : "
+        android:textSize="15dp"
+        android:layout_below="@+id/fileName"
         />
 
     <TextView
@@ -22,7 +30,7 @@
         android:layout_height="wrap_content"
         android:text="Total Scan : "
         android:textSize="25dp"
-        android:layout_below="@+id/fileName"/>
+        android:layout_below="@+id/hashString"/>
     <TextView
         android:id="@+id/TotalScanPositives"
         android:layout_width="match_parent"
