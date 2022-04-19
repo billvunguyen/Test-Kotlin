@@ -8,3 +8,6 @@
 
 ## Diagram
 ![Diagram](/diagram.png)
+
+#### Only using on simulateur
+#### Don't forget allow application access to storage
