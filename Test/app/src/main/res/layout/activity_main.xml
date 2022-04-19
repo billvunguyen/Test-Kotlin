@@ -9,7 +9,7 @@
         android:id="@+id/btn_viewList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="View Installed App" />
+        android:text="View Dowloaded File / App" />
 
     <ListView
         android:id="@+id/listView"
@@ -31,13 +31,4 @@
         android:text="Hash and test level security"
         android:layout_below="@+id/input_text"/>
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="Choose"
-        android:textColor="@android:color/holo_purple"
-        android:textStyle="italic|bold"
-        android:layout_below="@+id/listView"/>
 </RelativeLayout>

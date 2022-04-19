@@ -29,11 +29,12 @@ import org.json.JSONObject
 import org.json.JSONTokener
 
 
-class hashCode : AppCompatActivity() {
+class securityCheck : AppCompatActivity() {
 
     private var apiKey: String = "a761671eabbe821281c9b8c3fccd149905f4df3a832605aa7f821b7a45dde6a6"
 
     var fileName:String = ""
+    var stringHash:String = ""
 
     private var requestQueue: RequestQueue? = null
 
@@ -49,13 +50,14 @@ class hashCode : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_hash_code)
 
-        val getApplicationString:String = intent.getStringExtra("textHash").toString()
+        val getFileName:String = intent.getStringExtra("fileName").toString()
+        stringHash = intent.getStringExtra("textHash").toString()
 
         val textViewFileName: TextView = findViewById(R.id.fileName)
 
-        this.fileName = getApplicationString
+        this.fileName = getFileName
         textViewFileName.text= "Hash : $fileName"
-        Log.d("abc",fileName)
+        Log.d("fileNameHash",fileName)
 
         val btnTestApplication = findViewById<Button>(R.id.btn_test)
         btnTestApplication.setOnClickListener {
@@ -84,10 +86,11 @@ class hashCode : AppCompatActivity() {
 
     private fun securityCheck() {
         // file check
-//        var fileNameTest:String = "[Ljava.io.File;@ae13725"
-        var hash = (md5(fileName).toHex())
+        var fileNameTest:String = "/storage/emulated/0/Download/images.jpeg"
+        var hash = stringHash
         Log.d("hashcode",hash)
-        Log.d("hashcode",fileName)
+//        Log.d("hashcode",fileNameTest)
+//        Log.d("hashcode",fileName)
 
         hashString?.text = "Hash String : $hash"
 
